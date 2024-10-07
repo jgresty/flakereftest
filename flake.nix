@@ -12,6 +12,8 @@
           self.shortRef
         else if (self ? ref) then
           self.ref
+        else if (self ? rev) then
+          self.rev
         else if (lastMod != "") then
           builtins.substring 0 8 lastMod
         else
