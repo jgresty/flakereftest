@@ -6,6 +6,10 @@
   outputs =
     { self, nixpkgs }:
     let
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+      };
+
       lastMod = self.lastModifiedDate or self.lastModified or "";
       version =
         if (self ? shortRef) then
@@ -20,15 +24,12 @@
           "develop";
     in
     {
-      packages.x86_64-linux.default =
-        (import nixpkgs {
-          system = "x86_64-linux";
-        }).writeShellApplication
-          {
-            name = "flake-ref-test";
-            text = ''
-              echo ${version}
-            '';
-          };
+      inherit self;
+      packages.x86_64-linux.default = pkgs.writeShellApplication {
+        name = "flake-ref-test";
+        text = ''
+          echo ${version}
+        '';
+      };
     };
 }
